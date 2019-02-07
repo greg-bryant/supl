@@ -1,0 +1,60 @@
+.Sequence : 'ListItem' 
+
+A trivial Google App Engine web application 
+enabling the user to create lists with items 
+
+(This automatically puts everything in a directory gen__) 
+
+-------------------------------------------------------------------------- 
+
+.step 1 : 'form' 
+Starting morphology: overall shape 
+
+.P : 'start' 
+.nt : 'form main file' 
+.nt : 'form other files' 
+-------------------------------------------------------------------------- 
+
+.step 2 : 'form: the GAE target morphology' 
+Starting Morphology (position) 
+
+POSITIONS / PRODUCTIONS / MORPHOLOGY 
+.P : 'form main file' 
+.file : 'ListItem.py' 
+
+.t : 'name' 
+<<<
+# ListItem.py 
+
+>>>
+
+.t : 'import' 
+<<<
+import cgi 
+import os 
+from google.appengine.ext import db 
+from google.appengine.ext import webapp 
+from google.appengine.ext.webapp import template 
+from google.appengine.ext.webapp.util import run_wsgi_app 
+
+>>>
+
+.nt : 'db' 
+.nt : 'pages' 
+.nt : 'handler map' 
+
+.t : 'main' 
+<<<
+
+def main(): 
+  run_wsgi_app(application) 
+
+if __name__ == "__main__": 
+  main() 
+>>>
+
+.P : 'form other files' 
+.nt : 'homepage template' 
+.nt : 'launch file' 
+
+-------------------------------------------------------------------------- 

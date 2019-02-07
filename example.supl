@@ -1,0 +1,497 @@
+It seems like you should definately make this the SEQUENCE language.
+It is about steps. And substitutions and additions to the program at each step.
+It is about global stuff at each step, which includes several subs/ adds to
+each file. And adding files.
+
+Basically, it is a file change animation language.
+
+TRY not to turn it into grogix. Or m4. Or yacc. Too many ideas and features.
+You need to keep the meaning of symbols as explanable as possible, or else
+it really cannot be useful for the work intended -- the generation of new programs.
+Note that, at some point, this will be the internal representation of multi-file
+trans-file, beyond-file tool. But I want to use it for actual generation work.
+I have a lot of sites to build.
+
+pmore was very hard to understand. essentially local namespaces for productions.
+confusing. People can only keep so many hierarchies in mind at once. and they are
+used to an a.b.c kind of namespace hierarchy, if you would like to do that sometime,
+cool. but you can do that within strings for now -- creating items.post handler etc.
+
+trying to find ways to document and polish the good unfolding of a program
+to make it easier to write, and to learn, what happened
+and make it esier to replace the details in new environments
+while unfolding in harmony with itself, its environment, and
+explained human goals and factors.
+
+But I believe the ".nt" will, through several steps, become more
+and more essential, global, and interesting, which is what is
+needed in most systems. The ".T" makes it immediately useful,
+so that these ".nt" intermediate ideas can be found.
+ 
+the location of .file is interesting. Sometimes you want a whole production
+to be within one file. But you also might want a production to span files,
+even though that's kind of what a '.step' is for. So? Will people ignore the
+holistic purpose of .step if they can split a production into many files?
+I mean, a production already does this: the high-level production tends not
+to refer to files (although it may in the 'stub future': when you want the
+program to run at each step) and the nt's refer to other p's later that are
+all in different files ...
+
+if you make .file an attribute of p, nt, and t, then the files will be all over the
+the place and very tough to find.
+
+hard as it might be to implement (one node tree LR depth-first traversal should still
+work for all the files at once) it seems like you should be able to assign a file
+at any level that makes it easier to understand what's going on: p, nt, or t. 
+
+so, statment will need to become dot_keyword string_list, where the second parameter
+is the optional filename.
+
+these aspect overlaps are tricky. I don't know that I've helped at all here...
+but let's finish building it and see.
+
+------------------------------------------------------------------------- 
+.sequence : 'ListItem'
+
+A trivial Google App Engine web application 
+enabling the user to create lists with items 
+
+(This automatically puts everything in a directory gen__)
+
+------------------------------------------------------------------------- 
+.step 1 : 'form' 
+ Starting morphology overall shape 
+
+----------
+.p : 'start' 
+.nt : 'form main file' 
+.nt : 'form other files' 
+----------
+
+-------------------------------------------------------------------------- 
+
+.step 2 : 'form -- the GAE target morphology' 
+ Starting Morphology (position) 
+
+POSITIONS / PRODUCTIONS / MORPHOLOGY 
+----------
+.p : 'form main file' 'ListItem.py'
+
+.t : 'name' 
+<<<
+# ListItem.py 
+>>>
+
+.t : 'import' 
+<<<
+import cgi 
+import os 
+from google.appengine.ext import db 
+from google.appengine.ext import webapp 
+from google.appengine.ext.webapp import template 
+from google.appengine.ext.webapp.util import run_wsgi_app 
+>>>
+
+.nt : 'db' 
+.nt : 'pages' 
+.nt : 'handler map' 
+
+.t : 'main' 
+<<<
+def main(): 
+  run_wsgi_app(application) 
+
+if __name__ == "__main__": 
+  main() 
+>>>
+
+.p : 'form other files' 
+.nt : 'homepage template' 
+.nt : 'launch file' 
+
+---------------------------
+
+.step 3 : 'data and purpose' 
+There is a simple data model that reflects the purpose of the application 
+
+In our case, two types of data, one forming a List of the others. 
+A List key is then required for the Item members. 
+
+PRINCIPLES 
+
+(POSITIONS / PRODUCTIONS / MORPHOLOGY) + (PARAMETERS) 
+
+.p : 'db' 
+.t : 'db_model' 
+<<<
+class List(db.Model): 
+    name = db.StringProperty(multiline=True) 
+
+>>>
+
+.t : 'db_model_with_ref' 
+<<<
+class Item(db.Model): 
+     list_key = db.ReferenceProperty(List) 
+     name = db.StringProperty(multiline=True) 
+
+>>>
+
+-------------------------------------------------------------------------- 
+
+.step 4 : 'Functional Centers and the First Bridge' 
+There are functional centers, which reflect the primary actions of the application, 
+and the technology in which the application runs. 
+
+POSITIONS / PRODUCTIONS / MORPHOLOGY 
+.p : 'pages' 
+.nt : 'home page' 
+.nt : 'creating lists' 
+.nt : 'creating items' 
+-------------------------------------------------------------------------- 
+
+.step 5 : 'A page and the renderer' 
+A page consists of handlers and a renderer 
+
+POSITIONS / PRODUCTIONS / MORPHOLOGY 
+.p : 'home page'
+.nt : 'home page handler'
+.nt : 'home page render'
+-------------------------------------------------------------------------- 
+
+.step 6 : 'Class and Method Morphology Pages' 
+One page, the home page, in this case 
+
+.p : 'home page handler' 
+.nt : 'home page handler title' 
+.t : 'handler body' 
+<<<
+  def get(self): 
+     template_values = { 
+        "list_form": 0, 
+        "item_form": 0 
+     } 
+     self.response.out.write(render(template_values)) 
+>>>
+
+.p : 'home page render' 
+.nt : 'render body' 
+-------------------------------------------------------------------------- 
+
+.step 7 : 'Class and Method Morphology Feature handlers' 
+Non-page handlers for the web, has a GET handler, which sets up the feature 
+and a POST handler, which does it. 
+
+.p : 'creating lists'
+.nt : 'creating lists.title' 
+.nt : 'creating lists.get handler' 
+.nt : 'creating lists.post handler' 
+
+.p : 'creating items' 
+.nt : 'creating items.title' 
+.nt : 'creating items.get handler' 
+.nt : 'creating items.post handler' 
+-------------------------------------------------------------------------- 
+
+.step 8 : 'Titles and Parameters: The Class and Method Bridge' 
+The functional centers are expressed in the form of methods and classes. 
+Among these, the Handlers form a distinct group. 
+The handler classes, the calls to render, have explicit arguments. 
+This is for all the parameter non-teminals above. 
+
+.p : 'home page handler title'
+.t : 'class_title' 
+<<<
+class HomePage (webapp.RequestHandler): 
+
+>>>
+	
+.p : 'creating lists.title' 
+.t : 'class_title' 
+<<<
+class CreateList (webapp.RequestHandler): 
+
+>>>
+
+.p : 'creating items.title' 
+.t : 'class_title' 
+<<<
+class CreateItem  (webapp.RequestHandler): 
+
+>>>
+-------------------------------------------------------------------------- 
+
+.step 9 : 'Shape of a handler map' 
+
+.p : 'handler map' 
+.t : 'app instantiation' 
+<<<
+application = webapp.WSGIApplication([ 
+>>>
+
+.nt : 'URL handler list' 
+.t : 'debug flag' 
+<<<
+   ],debug=True) 
+>>>
+-------------------------------------------------------------------------- 
+
+.step 10 : 'handler list' 
+
+.p : 'URL handler list' 
+.t : 'pages' 
+<<<
+   ("/", HomePage), 
+>>>
+
+.t : 'forms with keys' 
+<<<
+   ("/item_form/(.*)/", CreateItem), 
+>>>
+
+.t : 'forms without keys' 
+<<<
+   ("/list_form/", CreateList), 
+>>>
+
+.t : 'posts' 
+<<<
+   ("/create_list/", CreateList), 
+   ("/create_item/", CreateItem) 
+>>>
+-------------------------------------------------------------------------- 
+
+.step 11 : 'template valve' 
+
+.p : 'render body'
+.t : 'name and parameters' 
+<<<
+def render (template_values): 
+>>>
+
+.nt : 'template payload' 
+.t : 'get template file' 
+<<<
+  path = os.path.join(os.path.dirname(__file__), "index.html")
+>>>
+
+.t : 'return popluated template' 
+<<<
+  return(template.render(path, template_values)) 
+
+>>>
+-------------------------------------------------------------------------- 
+
+.step 12 : 'Form Get Methods' 
+
+.p : 'creating lists.get handler'
+.t : 'call with self' 
+<<<
+  def get (self): 
+>>>
+
+.t : 'template dictionary' 
+<<<
+     template_values = { 
+        "list_form": 1 
+     } 
+>>>
+
+.t : 'http response with render' 
+<<<
+     self.response.out.write (render(template_values)) 
+>>>
+
+.p : 'creating items.get handler' 
+.t : 'call with self and key' 
+<<<
+  def get (self, list_key): 
+>>>
+
+.t : 'template dictionary' 
+<<<
+     template_values = { 
+        "item_form": 1, 
+        "list_key": list_key 
+     } 
+>>>
+
+.t : 'http response with render' 
+<<<
+     self.response.out.write (render(template_values)) 
+>>>
+-------------------------------------------------------------------------- 
+
+.step 13 : 'Template outline' 
+
+.p : 'homepage template' 'index.html' 
+.t : 'html top' 
+<<<
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
+          "http://www.w3.org/TR/html4/loose.dtd"> 
+<html> 
+<head> 
+  <title>Passing Keys</title> 
+  <meta http-equiv="Content-Type" content="text/html;  
+    charset=UTF-8" > 
+</head> 
+<body> 
+<a href="/"><font size="+3"><b>Passing Keys</b></font></a><br> 
+ <br><br> 
+>>>
+
+.nt: 'homepage template list form' 
+.t : 'list iteration' 
+<<<
+{% for list in lists %} 
+   <font size="+3"><b>{{ list.name }}</b></font><br> 
+   {% for item in list.items %} 
+      &nbsp;&nbsp;&nbsp;<b>*</b> {{ item.name }} <br>  
+   {% endfor %} 
+>>>
+
+.nt : 'homepage template item form' 
+.t : 'html tail' 
+<<<
+{% endfor %} 
+
+</body> 
+</html> 
+>>>
+-------------------------------------------------------------------------- 
+
+.step 14 : 'List Form Pathway' 
+
+.p : 'homepage template list form' 
+.t : 'condition and html' 
+<<<
+{% if list_form %} 
+  <form action="/create_list/" method="post"> 
+    <textarea  style="background:#eeee00" name="name" rows=1 cols=33></textarea><br> 
+    <span align="left"><input type="Submit" name="button" value="Create list"></span> 
+    <span style="padding-left:138px"><a href="/">cancel</a></span><br> 
+  </form> 
+{% else %} 
+  <br>&nbsp;<a href="/list_form/">Create a List</a><br><br> 
+{% endif %} 
+>>>
+-------------------------------------------------------------------------- 
+
+.step 15 : 'Item Form Pathway' 
+
+.p : 'homepage template item form'
+.t : 'if form and this item' 
+<<<
+{% if item_form %} 
+  {% ifequal list.key list_key %} 
+    <a name="form"></a> 
+    <form action="/create_item/" method="post"> 
+      <span style="padding-left:15px"> 
+         <textarea style="background:#eeee00" name="name"  
+               rows=1 cols=33></textarea><br> 
+      </span> 
+      <span style="padding-left:15px">  
+         <input type="Submit" name="button" value="Create an item"> 
+      </span> 
+      <span style="padding-left:130px"> 
+         <a href="/">cancel</a> 
+      </span> 
+      <br> 
+      <input type="hidden" name="list_key"  
+                               value="{{ list_key }}"> 
+    </form> 
+  {% else %} 
+    <br> 
+    <span style="padding-left:15px"> 
+       <a href="/item_form/{{ list.key }}/#form"> 
+            Create an item 
+       </a> 
+    </span> 
+    <br><br> 
+  {% endifequal %} 
+{% else %} 
+   <br> 
+      <span style="padding-left:15px"> 
+         <a href="/item_form/{{ list.key }}/#form">Create an item</a> 
+      </span> 
+      <br><br> 
+{% endif %} 
+
+>>>
+-------------------------------------------------------------------------- 
+
+.step 16 : 'Pathway posts' 
+
+.p : 'creating lists.post handler' 
+.t : 'cl code' 
+<<<
+  def post(self): 
+    list = List() 
+
+    list.name = self.request.get("name") 
+    list.put() 
+
+    self.redirect("/") 
+
+>>>
+
+.p : 'creating items.post handler' 
+.t : 'ci code' 
+<<<
+  def post(self): 
+    item = Item() 
+
+    list_key = self.request.get("list_key") 
+    item.list_key =  List.get(list_key) 
+    item.name = self.request.get("name") 
+    item.put() 
+
+    self.redirect("/") 
+
+>>>
+-------------------------------------------------------------------------- 
+
+.step 17 : 'Template Payload' 
+
+.p : 'template payload' 
+.t : 'code' 
+<<<
+  lists = db.GqlQuery("SELECT * FROM List") 
+
+  new_lists = [] 
+  for list in lists: 
+    items = db.GqlQuery("SELECT * FROM Item Where list_key = :1", 
+                                            list.key()) 
+
+    new_list = { 
+        "name": list.name, 
+        "key": str(list.key()), 
+        "items": items 
+    } 
+    new_lists.append(new_list) 
+   
+  template_values["lists"] = new_lists 
+
+>>>
+-------------------------------------------------------------------------- 
+
+.step 18 : 'Launch file' 
+
+.p : 'launch file' 'app.yaml' 
+.t : 'app.yaml'
+<<<
+application: listitem 
+version: 1 
+runtime: python 
+api_version: 1 
+
+handlers: 
+
+- url: /(.*).txt 
+  static_files: \1.txt 
+  upload: (.*).txt 
+
+- url: /.* 
+  script: ListItem.py 
+>>>
+

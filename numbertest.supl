@@ -1,0 +1,80 @@
+------------------------------------------------------------------------- 
+.sequence : 'Number Test'
+
+------------------------------------------------------------------------- 
+.step 1 : 'one' 
+
+----------
+.p : 'start' 'numbertest.out'
+.nt : 'b1' 
+.nt : 'b2' 
+----------
+
+-------------------------------------------------------------------------- 
+
+.step 2 : 'two' 
+
+----------
+.p : 'b1'
+
+.t : 't1' 
+<<<
+Step 2 Text 1
+>>>
+
+.t : 't2' 
+<<<
+Step 2 Text 2
+>>>
+
+.nt : 'b3' 
+<<<
+Step 2 Text 3
+>>>
+
+.nt : 'b4' 
+<<<
+Step 2 Text 4
+>>>
+
+.nt : 'b5' 
+<<<
+Step 2 Text 5
+>>>
+
+.t : 't3' 
+<<<
+Step 2 Text 6
+>>>
+
+.p : 'b2' 
+.nt : 'b6' 
+<<<
+Step 2 Text 7
+>>>
+
+.nt : 'b7' 
+<<<
+Step 2 Text 8
+>>>
+
+These 'nt''s aren't being output. FIX TODO.
+
+The distinction between P, NT, and T is a bit weird.
+It's like stuff, stuff's children, their children.
+In our case, it's more like cells than rewrite rules.
+
+---------------------------
+
+-------------------------------------------------------------------------- 
+
+.step 3 : 'three' 
+
+----------
+
+.p : 'b3'
+
+.t : 't4' 
+<<<
+Step 3 Text 1
+>>>
