@@ -1,0 +1,158 @@
+gallery.supl
+
+---------------------------
+
+.sequence 'gallery app'
+
+------------------
+
+These are the aspects which connect and define the app:
+
+a configuration for the platform
+the server:
+ a storage facility
+ a cycle of access to storage on the server
+the client (in our case delivered by the server):
+ a cycle of commands on the client
+ a display of those commands
+ a styling of those displays
+
+Some of these are things which, even if trivial, have default values, so
+ignoring them is not necessarily keeping them out of the picture.
+
+.step 1
+
+.p 'start'
+.nt 'external config'
+.nt 'server'
+.nt 'server client bridge'
+.nt 'client'
+
+------------------
+
+.step 2
+
+---------
+
+.p 'external config' 'app.yaml'
+
+---
+.nt 'external config values'
+<<<
+
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+>>>
+---
+
+---
+.nt 'external config handlers'
+<<<
+
+handlers:
+- url: /
+  script: gallery.app
+
+>>>
+---
+
+---------
+
+.p 'server' 'gallery.py'
+
+.nt 'server includes'
+<<<
+
+# gallery.py
+
+import os
+import cgi
+import webapp2
+import time
+
+from google.appengine.ext import db
+from google.appengine.ext.webapp import template
+
+>>>
+
+.nt 'server db schema'
+<<<
+
+class List(db.Model):
+  name = db.StringProperty(multiline=True)
+
+class Item(db.Model):
+  list_key = db.ReferenceProperty(List)
+  name = db.StringProperty(multiline=True)
+
+>>>
+
+.nt 'server db crud cycle'
+<<<
+
+
+
+>>>
+
+.nt 'server demux'
+<<<
+
+app = webapp2.WSGIApplication(
+                                     [('/', HomePage),
+                                        ('/list_form/', CreateList),
+                                        ('/create_list/', CreateList),
+                                        ('/item_form/(.*)/', CreateItem),
+                                        ('/create_item/', CreateItem)],
+                                     debug=True)
+
+>>>
+
+
+---------
+
+.p 'server client bridge' 'index.html'
+.nt ''
+
+.p 'client' 'main.js'
+
+.nt 'client crud'
+<<<
+
+>>>
+
+.nt 'client display'
+<<<
+
+>>>
+
+---------
+.p 'client style' 'gallery.css'
+
+.nt 'heading'
+<<<
+
+>>>
+
+---------
+
+------------------
+
+.step 3 'authentication'
+
+------------------
+
+.step 4 'ungenerate infrastructure'
+
+The generative approach to DB ETL (extract, transform, load).
+Need to be able to retrieve so you can regenerate and repopulate.
+Two things missing -- a way to demonstrate that X becomes Y.
+And a way to, still, make gestalt changes relative to a particular
+aspect such as this one. In the meantime, I'll use backwards-inserted
+stubs.
+
+------------------
+
+
