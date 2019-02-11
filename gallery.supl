@@ -20,7 +20,11 @@ the client (in our case delivered by the server):
 Some of these are things which, even if trivial, have default values, so
 ignoring them is not necessarily keeping them out of the picture.
 
-.step 1
+------------------
+
+.step 1 'minimal stubs'
+
+---------
 
 .p 'start'
 .nt 'external config'
@@ -30,7 +34,7 @@ ignoring them is not necessarily keeping them out of the picture.
 
 ------------------
 
-.step 2
+.step 2 'minimal end-to-end code'
 
 ---------
 
@@ -63,6 +67,7 @@ handlers:
 
 .p 'server' 'gallery.py'
 
+---
 .nt 'server includes'
 <<<
 
@@ -77,6 +82,9 @@ from google.appengine.ext import db
 from google.appengine.ext.webapp import template
 
 >>>
+---
+
+---
 
 .nt 'server db schema'
 <<<
@@ -89,14 +97,18 @@ class Item(db.Model):
   name = db.StringProperty(multiline=True)
 
 >>>
+---
 
+---
 .nt 'server db crud cycle'
 <<<
 
 
 
 >>>
+---
 
+---
 .nt 'server demux'
 <<<
 
@@ -109,6 +121,7 @@ app = webapp2.WSGIApplication(
                                      debug=True)
 
 >>>
+---
 
 
 ---------
@@ -140,7 +153,7 @@ app = webapp2.WSGIApplication(
 
 ------------------
 
-.step 3 'authentication'
+.step 3 'authentication and roles'
 
 ------------------
 
@@ -148,11 +161,14 @@ app = webapp2.WSGIApplication(
 
 The generative approach to DB ETL (extract, transform, load).
 Need to be able to retrieve so you can regenerate and repopulate.
-Two things missing -- a way to demonstrate that X becomes Y.
-And a way to, still, make gestalt changes relative to a particular
-aspect such as this one. In the meantime, I'll use backwards-inserted
-stubs.
 
 ------------------
+
+.step 5 'dashboards'
+
+------------------
+
+
+
 
 
