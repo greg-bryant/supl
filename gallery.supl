@@ -31,6 +31,7 @@ ignoring them is not necessarily keeping them out of the picture.
 .nt 'server'
 .nt 'server client bridge'
 .nt 'client'
+.nt 'client style'
 
 ------------------
 
@@ -44,6 +45,7 @@ ignoring them is not necessarily keeping them out of the picture.
 .nt 'external config values'
 <<<
 
+application: gallery
 version: 1
 runtime: python27
 api_version: 1
@@ -57,8 +59,10 @@ threadsafe: true
 <<<
 
 handlers:
-- url: /
+- url: /.*
   script: gallery.app
+  secure: always
+  redirect_http_response_code: 301
 
 >>>
 ---
@@ -80,6 +84,7 @@ import time
 
 from google.appengine.ext import db
 from google.appengine.ext.webapp import template
+from google.appengine.api import users
 
 >>>
 ---
@@ -89,12 +94,23 @@ from google.appengine.ext.webapp import template
 .nt 'server db schema'
 <<<
 
-class List(db.Model):
-  name = db.StringProperty(multiline=True)
+	# DB Schema -- to do
 
-class Item(db.Model):
-  list_key = db.ReferenceProperty(List)
-  name = db.StringProperty(multiline=True)
+>>>
+---
+
+---
+.nt 'server delivers client'
+<<<
+
+class MainPage(webapp2.RequestHandler):
+    def get(self):
+
+    template_values = {
+    }
+
+    path = os.path.join(os.path.dirname(__file__), 'index.html')
+    self.response.out.write(template.render(path, template_values))
 
 >>>
 ---
@@ -103,7 +119,7 @@ class Item(db.Model):
 .nt 'server db crud cycle'
 <<<
 
-
+    # access API - to do
 
 >>>
 ---
@@ -113,12 +129,8 @@ class Item(db.Model):
 <<<
 
 app = webapp2.WSGIApplication(
-                                     [('/', HomePage),
-                                        ('/list_form/', CreateList),
-                                        ('/create_list/', CreateList),
-                                        ('/item_form/(.*)/', CreateItem),
-                                        ('/create_item/', CreateItem)],
-                                     debug=True)
+                                     [('/', MainPage)],
+                                            debug=True)
 
 >>>
 ---
@@ -127,27 +139,111 @@ app = webapp2.WSGIApplication(
 ---------
 
 .p 'server client bridge' 'index.html'
-.nt ''
 
+---
+.nt 'to launch javascript'
+<<<
+
+<!DOCTYPE html>
+<html style="height:100%;width:100%;">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+        <title>gallery</title>
+        <script type="text/javascript" charset="utf-8" src="main.js"></script>
+        <link type="text/css" rel="stylesheet" href="main.css"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+            var page_type = "top";
+            var type_key = "";
+            var type_id = "";
+        </script>
+    </head>
+    <body onload="central_handler('common_page',{})">
+        <div id="whole" style='height:100%;width:100%;'>
+            <div id="header">&nbsp;</div>
+        </div>
+    </body>
+</html>
+
+>>>
+---
+---------
+
+---------
 .p 'client' 'main.js'
 
+---
+.nt 'client central handler / event loop'
+<<<
+
+var event_queue = [];
+var the_event = null;
+
+// CENTRAL_HANDLER:
+//  called by onload and setTimeout
+function central_handler() {
+
+    if (!(event_queue.length > 0)) {
+    return;
+    }
+    the_event = event_queue.shift();
+
+    // call event
+    window[the_event.name]();
+
+    // only loop until the stack is empty
+    if (event_queue.length > 0) {
+       setTimeout(function () {central_handler();},
+       			     the_event.delay);
+    }
+}
+
+>>>
+---
+
+---
 .nt 'client crud'
 <<<
-
+	// api use - to do
 >>>
+---
 
+---
 .nt 'client display'
 <<<
-
+	// display data - to do
 >>>
+---
+---------
 
 ---------
 .p 'client style' 'gallery.css'
 
+---
 .nt 'heading'
 <<<
 
+body {
+  margin: 25px;
+  background-color: rgb(240,240,240);
+  font-family: arial, sans-serif;
+  font-size: 12px;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* class="a_class" */
+.a_class { color: blue; }
+
+/* id="an_id"> */
+#an_id { color: orange; }
+
 >>>
+---
 
 ---------
 
