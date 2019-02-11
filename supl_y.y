@@ -150,9 +150,9 @@ statement: dot_keyword string_list quote_list
 		   //printf("\nRETURNED!!!");
 		   if (!return_node) {
 		     // supl error
-		     printf("sorry: no .nt use found for production %s'\n",$2.token);
-		     printf("an identifier must be used before it is defined\n");
-		     printf("that's the nature of deductive directed graphs\n");
+		     printf("sorry: no .nt (non-terminal) found for .p (production) %s'\n",$2.token);
+		     printf(" an identifier must be referenced before it is defined\n");
+		     printf(" that's the nature of deductive directed graphs\n");
 		     exit(1);
 		   }
 		   //printf("\nRETURNED 2!!!");
@@ -333,9 +333,9 @@ node *get_nt_node(unsigned char *p_name, node *start_node) {
 // recurse / traverse the tree. build the files. print the files.
 void traverse_and_print(void) 
 {
-  printf("\n about to traverse \n");
+  //printf("\n about to traverse \n");
   tree_traverse(root);
-  printf("\n about to print \n");
+  //printf("\n about to print \n");
   serials_print();
 }
 
@@ -447,15 +447,17 @@ void serials_print(void)
   // 21!! FAR too many. FIX TODO
 
   for (i=0;i<file_index;i++) {
-    printf("\n serials print loop: %d \n",i);
+    //printf("\n serials print loop: %d \n",i);
     sprintf(path,"./%s/%s",directory_name,file_list[i]);
 
     fp = fopen(path,"w");
     if (!fp) {
       printf("fopen failed, did you make the folder? errno = %d\n", errno);
-    } else {
+    } 
+    /* else {
       printf("fopen succeeded\n");
     }
+    */
     printf("\nFile: %s\n",path);
     //printf("\n serials print buffer %d ... \n",
     //   (int)strlen((const char *)file_buffers[i]));
@@ -463,7 +465,7 @@ void serials_print(void)
     //   (const char *)file_buffers[i]);
 
     fprintf(fp,"%s",(const char *)file_buffers[i]);
-    printf("\n about to close \n");
+    //printf("\n about to close \n");
     fclose(fp);
   }
 }

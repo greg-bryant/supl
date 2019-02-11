@@ -94,7 +94,7 @@ from google.appengine.api import users
 .nt 'server db schema'
 <<<
 
-	# DB Schema -- to do
+# DB Schema -- to do
 
 >>>
 ---
@@ -106,11 +106,11 @@ from google.appengine.api import users
 class MainPage(webapp2.RequestHandler):
     def get(self):
 
-    template_values = {
-    }
+    	template_values = {
+    	}
 
-    path = os.path.join(os.path.dirname(__file__), 'index.html')
-    self.response.out.write(template.render(path, template_values))
+    	path = os.path.join(os.path.dirname(__file__), 'index.html')
+    	self.response.out.write(template.render(path, template_values))
 
 >>>
 ---
@@ -160,7 +160,7 @@ app = webapp2.WSGIApplication(
     </head>
     <body onload="central_handler('common_page',{})">
         <div id="whole" style='height:100%;width:100%;'>
-            <div id="header">&nbsp;</div>
+            <div id="header">HEY HEY</div>
         </div>
     </body>
 </html>
@@ -240,7 +240,7 @@ h1 {
 .a_class { color: blue; }
 
 /* id="an_id"> */
-#an_id { color: orange; }
+#header { color: orange; }
 
 >>>
 ---

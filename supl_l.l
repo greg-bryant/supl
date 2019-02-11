@@ -97,10 +97,12 @@ int qcas(char);
                              // terminal_file[terminals_index] = file_list[file_index-1];
                              int qb = strlen((const char *)quote_buffer);
 
-                             //printf("quote_buffer length: %d\n",qb);
-                             //printf("quote_buffer : %s\n",quote_buffer);
-                             //printf("terminals index: %d\n",terminals_index);
-                             
+                             /*
+                             printf("quote_buffer length: %d\n",qb);
+                             printf("quote_buffer : %s\n",quote_buffer);
+                             printf("terminals index: %d\n",terminals_index);
+                             */
+
                              // just temporary. needs to be done during traversal. TODO
                              // terminal_file[terminals_index] = 0;
 
@@ -124,6 +126,8 @@ int qcas(char);
                                 Alternatively, I can strip out and store the quotes
                                 and replace them with a label like <<<< quote_store_1 >>>>
                               */
+
+                             // printf("\nLEX: INSIDE SINGLE quote: \n%s\n",yytext);
 
                              if (quote_on) {
                                int qi = 0;
@@ -151,6 +155,8 @@ int qcas(char);
                              qcas(yytext[0]);
                            }
 [0-9]+                     {
+                             /*
+                             //printf("\nLEX: INSIDE NUMBER: \n%s\n",yytext);
                              // if not in a quote
                              if (!qcas(yytext[0])) {
                                // and not in a comment
@@ -160,7 +166,24 @@ int qcas(char);
                                 yylval.is_stripped = 1;                                
                                 return STRING; 
                                }
-                             } 
+                             }
+			     */
+                             if (quote_on) {
+                               int qi = 0;
+                               int ql = 0;
+                               ql = strlen(yytext);
+                               for (qi = 0; qi < ql; qi++) {
+                                 qcas(yytext[qi]);
+                               }
+                             } else {
+                               if (!comment_on) {
+                                LMV; 
+                                //printf("STRING\n");
+                                yylval.is_stripped = 1;                                
+                                return STRING; 
+                               }
+                             }
+
                            } 
 .                          {
                              qcas(yytext[0]);

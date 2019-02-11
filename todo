@@ -26,6 +26,8 @@ Good things:
    because 'x' will next appear as a .p 'x', which can then have many more refined
    definitions. This is brilliant for unfolding.
 
+2) very different from the 'boilerplat' approach of, say, jsfiddle.
+
 MAYBE needed things:
 
 1) A way to rewrite X (a,b) as Y (c,d). This would bring it close to

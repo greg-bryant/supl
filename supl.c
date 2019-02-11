@@ -29,7 +29,7 @@ int main (int argc, char *argv[])
   char buf[50000];
   int i;
 
-  printf("starting ...\n");
+  //printf("starting ...\n");
 
   // source file (optional, default "example.supl")
   if (argc > 1) {
@@ -55,17 +55,19 @@ int main (int argc, char *argv[])
       exit(1);
     }
   }
+  /*
   printf("0 = %s\n",argv[0]);
   printf("1 = %s\n",argv[1]);
   printf("2 = %s\n",argv[2]);
   printf("3 = %s\n",argv[3]);
+  */
 
   // step (optional, default STEP_LIMIT)
   if (argc > 3) {
     target_step = atoi(argv[3]);
   }
 
-  printf("target step = %d\n",target_step);
+  //printf("target step = %d\n",target_step);
 
   if ((file_fd = fopen (file_name,"r")) == NULL) {
     printf ( "ERROR : Could not open file.\n");
