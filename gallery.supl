@@ -20,6 +20,13 @@ the client (in our case delivered by the server):
 Some of these are things which, even if trivial, have default values, so
 ignoring them is not necessarily keeping them out of the picture.
 
+Alternative stem differentiations:
+1) platform connections
+2) API connections
+3) server
+4) client
+5) storage
+
 ------------------
 
 .step 1 'minimal stubs'
@@ -27,7 +34,7 @@ ignoring them is not necessarily keeping them out of the picture.
 ---------
 
 .p 'start'
-.nt 'external config'
+.nt 'platform config'
 .nt 'server'
 .nt 'server client bridge'
 .nt 'client'
@@ -39,10 +46,10 @@ ignoring them is not necessarily keeping them out of the picture.
 
 ---------
 
-.p 'external config' 'app.yaml'
+.p 'platform config' 'app.yaml'
 
 ---
-.nt 'external config values'
+.nt 'platform config values'
 <<<
 
 application: gallery
@@ -55,7 +62,7 @@ threadsafe: true
 ---
 
 ---
-.nt 'external config handlers'
+.nt 'platform config handlers'
 <<<
 
 handlers:
@@ -129,7 +136,7 @@ class MainPage(webapp2.RequestHandler):
 .nt 'server db crud cycle'
 <<<
 
-    # access API - to do
+# access API - to do
 
 >>>
 ---
@@ -165,7 +172,7 @@ app = webapp2.WSGIApplication(
     </head>
     <body onload="main_init()">
         <div class="whole">
-            <div id="header">Initial text</div>
+            <div id="header">initial text</div>
         </div>
     </body>
 </html>
@@ -190,7 +197,7 @@ function main_init() {
 }
 
 function main_page() {
-	 $('#header').html("woo woo!");
+	 $('#header').html("Main Page");
 }
 
 // CENTRAL_HANDLER:
@@ -250,14 +257,17 @@ h1 {
   margin-top: 10px;
 }
 
-/* class="a_class" */
+/* classes */
 .whole { color: white; 
        	 height: 100%;
 	 width: 100%;
 }
 
-/* id="an_id"> */
-#header { color: orange; }
+/* ids */
+#header { color: purple;
+	  font-size: 24px;
+  	  font-weight: bold;
+	 }
 
 >>>
 ---
@@ -266,18 +276,38 @@ h1 {
 
 ------------------
 
-.step 3 'authentication and roles'
+.step 3 'data'
+
+
+---------
+.p 
+---------
+
+
+---------
+.p
+---------
+
+
+---------
+.p
+---------
+
 
 ------------------
 
-.step 4 'ungenerate infrastructure'
+.step 4 'authentication and roles'
+
+------------------
+
+.step 5 'ungenerate infrastructure'
 
 The generative approach to DB ETL (extract, transform, load).
 Need to be able to retrieve so you can regenerate and repopulate.
 
 ------------------
 
-.step 5 'dashboards'
+.step 6 'dashboards'
 
 ------------------
 
