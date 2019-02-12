@@ -59,6 +59,16 @@ threadsafe: true
 <<<
 
 handlers:
+- url: /main\.js
+  static_files: main.js
+  upload: main\.js
+  secure: always
+  redirect_http_response_code: 301
+- url: /main\.css
+  static_files: main.css
+  upload: main\.css
+  secure: always
+  redirect_http_response_code: 301
 - url: /.*
   script: gallery.app
   secure: always
@@ -159,7 +169,7 @@ app = webapp2.WSGIApplication(
         </script>
     </head>
     <body onload="central_handler('common_page',{})">
-        <div id="whole" style='height:100%;width:100%;'>
+        <div class="whole">
             <div id="header">HEY HEY</div>
         </div>
     </body>
@@ -217,7 +227,7 @@ function central_handler() {
 ---------
 
 ---------
-.p 'client style' 'gallery.css'
+.p 'client style' 'main.css'
 
 ---
 .nt 'heading'
@@ -237,7 +247,10 @@ h1 {
 }
 
 /* class="a_class" */
-.a_class { color: blue; }
+.whole { color: white; 
+       	 height: 100%;
+	 width: 100%;
+}
 
 /* id="an_id"> */
 #header { color: orange; }
