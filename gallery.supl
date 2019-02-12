@@ -155,22 +155,17 @@ app = webapp2.WSGIApplication(
 <<<
 
 <!DOCTYPE html>
-<html style="height:100%;width:100%;">
+<html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
         <title>gallery</title>
         <script type="text/javascript" charset="utf-8" src="main.js"></script>
         <link type="text/css" rel="stylesheet" href="main.css"/>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script>
-            var page_type = "top";
-            var type_key = "";
-            var type_id = "";
-        </script>
     </head>
-    <body onload="central_handler('common_page',{})">
+    <body onload="main_init()">
         <div class="whole">
-            <div id="header">HEY HEY</div>
+            <div id="header">Initial text</div>
         </div>
     </body>
 </html>
@@ -189,12 +184,21 @@ app = webapp2.WSGIApplication(
 var event_queue = [];
 var the_event = null;
 
+function main_init() {
+	 event_queue.push({'name':'main_page','delay':2000});
+	 central_handler();
+}
+
+function main_page() {
+	 $('#header').html("woo woo!");
+}
+
 // CENTRAL_HANDLER:
 //  called by onload and setTimeout
 function central_handler() {
 
     if (!(event_queue.length > 0)) {
-    return;
+      return;
     }
     the_event = event_queue.shift();
 
