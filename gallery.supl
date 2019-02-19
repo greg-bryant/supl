@@ -1,5 +1,7 @@
 gallery.supl
 
+order your considerations
+
 ---------------------------
 
 .sequence 'gallery app'
@@ -17,15 +19,8 @@ the client (in our case delivered by the server):
  a display of those commands
  a styling of those displays
 
-Some of these are things which, even if trivial, have default values, so
-ignoring them is not necessarily keeping them out of the picture.
-
-Alternative stem differentiations:
-1) platform connections
-2) API connections
-3) server
-4) client
-5) storage
+Some of these are things which, even if trivial, have default values, 
+so ignoring them is not necessarily keeping them out of the picture.
 
 ------------------
 
@@ -97,7 +92,15 @@ handlers:
 import os
 import cgi
 import webapp2
+import logging 
+import datetime
 import time
+import re
+import base64
+import urllib
+import random
+import hashlib
+import unicodedata
 
 from google.appengine.ext import db
 from google.appengine.ext.webapp import template
@@ -108,7 +111,7 @@ from google.appengine.api import users
 
 ---
 
-.nt 'server db schema'
+.nt 'server schema'
 <<<
 
 # DB Schema -- to do
@@ -272,42 +275,179 @@ h1 {
 >>>
 ---
 
+---
+.nt 'display style'
+---
+
 ---------
 
 ------------------
 
 .step 3 'data'
 
-
----------
-.p 
 ---------
 
+.p 'server schema'
+
+a gallery is 
+a splash page (optional)
+linked to a set of thumbnail pages (with captions)
+linked to photo pages
+so the db: one type
+
+photo, with caption text, and generated thumbnail.
+
+.nt 'photo schema'
+<<<
+class Photo(db.Model):
+    caption = db.StringProperty()
+    image = db.BlobProperty()
+    url = db.StringProperty(multiline=True)
+    timestamp = db.DateTimeProperty(auto_now_add=True)
+
+>>>
+
+.nt 'more schemas'
+<<<
+
+# stub for later schemas
+
+>>>
 
 ---------
-.p
+
+---------
+.p 'server db crud cycle'
+
+.nt create
+<<<
+
+class createPhoto(webapp2.RequestHandler):
+    def post(self):
+
+        imgdata = self.request.get('imgdata')
+        caption = self.request.get('caption')
+        adjusted_url = 'uploaded_' + str(time.time()) 
+
+        photo = Photo()
+        photo.image = db.Blob(images.resize(imgdata,500,378,allow_stretch=True))
+        photo.url = adjusted_url
+	photo.caption = caption
+        photo.put()
+
+        self.response.out.write("GOOD")
+        return
+
+>>>
+
+.nt read
+<<<
+class getPhoto(webapp2.RequestHandler):
+    def get(self,string):
+
+        uncoded = urllib.unquote(string)
+        adjusted = string.replace('%2F','/')
+        result = db.GqlQuery("SELECT * FROM SV_Photo WHERE url = :1 LIMIT 1",
+                    adjusted).fetch(1)
+        if (len(result) > 0):
+            self.response.headers['Content-Type'] = 'image/png'
+            self.response.out.write(result[0].image)
+        else:
+            photo = Photo()
+            photo.image = db.Blob(urlfetch.Fetch(uncoded).content)
+            photo.url = adjusted
+            photo.put()
+
+            self.response.headers['Content-Type'] = 'image/png'
+            self.response.out.write(photo.image)
+>>>
+
+.nt 'updateCaption'
+<<<
+
+class deletePhoto(webapp2.RequestHandler):
+    def get(self,string,caption):
+
+       key = Photo.get(string)
+       key.caption = caption
+       key.put()
+
+
+>>>
+
+.nt 'delete'
+<<<
+
+class deletePhoto(webapp2.RequestHandler):
+    def get(self,string):
+
+       key = Photo.get(string)
+       key.delete()
+
+>>>
+
 ---------
 
 
 ---------
-.p
----------
+.p 'server demux'
 
+.nt 'demux two'
+<<<
+
+app = webapp2.WSGIApplication(
+                                     [('/', MainPage),
+				     ('/CreatePhoto/',createPhoto),
+				     ('/photoGet/(.*)/(.*)/(.*)',getPhoto),
+				     ('/updateCaption/',updateCaption),
+				     ('/deletePhoto/(.*)',deletePhoto)],
+                                            debug=True)
+
+>>>
+
+
+---------
 
 ------------------
 
-.step 4 'authentication and roles'
+------------------
+
+.step 4 'client fetch and display'
+
+---------
+
+.p 'client crud'
+
+---------
+
+
+---------
+
+.p 'client display'
+
+---------
+
+
+---------
+
+.p 'display style'
+
+---------
 
 ------------------
 
-.step 5 'ungenerate infrastructure'
+.step 5 'authentication and roles'
+
+------------------
+
+.step 6 'ungenerate infrastructure'
 
 The generative approach to DB ETL (extract, transform, load).
 Need to be able to retrieve so you can regenerate and repopulate.
 
 ------------------
 
-.step 6 'dashboards'
+.step 7 'dashboards'
 
 ------------------
 
