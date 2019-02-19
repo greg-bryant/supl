@@ -3,9 +3,9 @@ gallery.supl
 order your considerations
 
 ---------------------------
-<b>
+
 .sequence 'gallery app'
-</b>
+
 ------------------
 
 These are the aspects which connect and define the app:
@@ -340,14 +340,14 @@ class createPhoto(webapp2.RequestHandler):
 
 >>>
 
-.nt 'read'
+.nt 'read one'
 <<<
 class getPhoto(webapp2.RequestHandler):
     def get(self,string):
 
         uncoded = urllib.unquote(string)
         adjusted = string.replace('%2F','/')
-        result = db.GqlQuery("SELECT * FROM SV_Photo WHERE url = :1 LIMIT 1",
+        result = db.GqlQuery("SELECT * FROM Photo WHERE key = :1 LIMIT 1",
                     adjusted).fetch(1)
         if (len(result) > 0):
             self.response.headers['Content-Type'] = 'image/png'
@@ -361,6 +361,42 @@ class getPhoto(webapp2.RequestHandler):
             self.response.headers['Content-Type'] = 'image/png'
             self.response.out.write(photo.image)
 >>>
+
+.nt 'read list'
+<<<
+class getPhotoList(webapp2.RequestHandler):
+    def get(self):
+
+        photos = db.GqlQuery("SELECT * FROM Photo")
+        return_string = '['
+        overview = '{ \'name\':\'photos\','
+        overview = overview + '\'value\':\'\' }'
+        return_string = return_string + overview
+
+        all_n = '[' + overview
+        k = 0
+        i = 0
+        for p in photos:
+
+            if i > 0:
+	                return_string = return_string + ','
+            return_string = return_string + '{ \'name\':' + '\'' + re.escape(c.name) + '\','
+            return_string = return_string + '\'key\':' + '\'' + str(c.key()) + '\' }'
+            i = i + 1
+
+        return_string = return_string + ']'   
+        all_n = all_n + ']'
+        if string == 'cn':
+            return_string = all_n
+        logging.debug(return_string)
+        return return_string
+        self.response.write(return_string)
+
+
+
+
+>>>
+
 
 .nt 'updateCaption'
 <<<
@@ -398,8 +434,9 @@ class deletePhoto(webapp2.RequestHandler):
 app = webapp2.WSGIApplication(
                                      [('/', MainPage),
 				     ('/CreatePhoto/',createPhoto),
-				     ('/photoGet/(.*)/(.*)/(.*)',getPhoto),
-				     ('/updateCaption/',updateCaption),
+				     ('/photoListGet/',getPhotoList),
+				     ('/photoGet/(.*)',getPhoto),
+				     ('/updateCaption/(.*)',updateCaption),
 				     ('/deletePhoto/(.*)',deletePhoto)],
                                             debug=True)
 
@@ -412,46 +449,70 @@ app = webapp2.WSGIApplication(
 
 ------------------
 
- step 4 'client fetch and display'
+.step 5 'client fetch'
 
 ---------
 
- p 'client crud'
+.p 'client crud'
 
----------
-
-
----------
-
- p 'client display'
-
----------
+.nt 'ajax routines'
+<<<
 
 
----------
+>>>
 
- p 'display style'
+.nt 'data access layer'
+<<<
+
+
+>>>
+
 
 ---------
 
 ------------------
 
- step 5 'authentication and roles'
+------------------
+
+.step 6 'client UX'
+
+
+---------
+
+.p 'client display'
+
+.nt 'initial fetch'
+
+.nt 'clickables'
+
+.nt 'photo display'
+
+.nt 'editing'
+
+---------
+
+
+---------
+
+.p 'display style'
+
+---------
 
 ------------------
 
- step 6 'ungenerate infrastructure'
+.step 5 'authentication and roles'
+
+------------------
+
+.step 6 'ungenerate infrastructure'
 
 The generative approach to DB ETL (extract, transform, load).
 Need to be able to retrieve so you can regenerate and repopulate.
 
 ------------------
 
- step 7 'dashboards'
+.step 7 'dashboards'
 
 ------------------
-
-
-
 
 
