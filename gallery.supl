@@ -365,7 +365,7 @@ class getPhoto(webapp2.RequestHandler):
 .nt 'updateCaption'
 <<<
 
-class deletePhoto(webapp2.RequestHandler):
+class updateCaption(webapp2.RequestHandler):
     def get(self,string,caption):
 
        key = Photo.get(string)
