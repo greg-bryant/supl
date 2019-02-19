@@ -319,7 +319,7 @@ class Photo(db.Model):
 ---------
 .p 'server db crud cycle'
 
-.nt create
+.nt 'create'
 <<<
 
 class createPhoto(webapp2.RequestHandler):
@@ -340,7 +340,7 @@ class createPhoto(webapp2.RequestHandler):
 
 >>>
 
-.nt read
+.nt 'read'
 <<<
 class getPhoto(webapp2.RequestHandler):
     def get(self,string):
@@ -412,42 +412,42 @@ app = webapp2.WSGIApplication(
 
 ------------------
 
-.step 4 'client fetch and display'
+ step 4 'client fetch and display'
 
 ---------
 
-.p 'client crud'
-
----------
-
-
----------
-
-.p 'client display'
+ p 'client crud'
 
 ---------
 
 
 ---------
 
-.p 'display style'
+ p 'client display'
+
+---------
+
+
+---------
+
+ p 'display style'
 
 ---------
 
 ------------------
 
-.step 5 'authentication and roles'
+ step 5 'authentication and roles'
 
 ------------------
 
-.step 6 'ungenerate infrastructure'
+ step 6 'ungenerate infrastructure'
 
 The generative approach to DB ETL (extract, transform, load).
 Need to be able to retrieve so you can regenerate and repopulate.
 
 ------------------
 
-.step 7 'dashboards'
+ step 7 'dashboards'
 
 ------------------
 
