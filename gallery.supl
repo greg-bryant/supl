@@ -458,10 +458,18 @@ app = webapp2.WSGIApplication(
 .nt 'ajax routines'
 <<<
 
+// maybe separate nts
+// get list
+
+// iterate through list to construct  photos html
+
+// caption crud 
+
+
 
 >>>
 
-.nt 'data access layer'
+.nt 'data access layer?'
 <<<
 
 
