@@ -120,6 +120,16 @@ from google.appengine.api import users
 ---
 
 ---
+
+.nt 'server auth'
+<<<
+
+# authentication, authorization, identity, login, logout  -- to do
+
+>>>
+---
+
+---
 .nt 'server delivers client'
 <<<
 
@@ -391,12 +401,7 @@ class getPhotoList(webapp2.RequestHandler):
         logging.debug(return_string)
         return return_string
         self.response.write(return_string)
-
-
-
-
 >>>
-
 
 .nt 'updateCaption'
 <<<
@@ -421,7 +426,32 @@ class deletePhoto(webapp2.RequestHandler):
        key.delete()
 
 >>>
+---------
 
+---------
+.p 'server auth'
+
+.nt 'google login'
+<<<
+
+class LoginPage(webapp2.RequestHandler):
+  def get(self):
+    user = users.get_current_user()
+
+    if user:
+      self.redirect('/')
+    else:
+      self.redirect(users.create_login_url("/"))
+
+class LogoutPage(webapp2.RequestHandler):
+  def get(self):
+    user = users.get_current_user()
+
+    if user:
+      self.redirect(users.create_logout_url(self.request.uri))
+    else:
+      self.redirect('/')
+>>>
 ---------
 
 
@@ -433,6 +463,8 @@ class deletePhoto(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication(
                                      [('/', MainPage),
+				     ('/logout/', LogoutPage),
+				     ('/login/', LoginPage),
 				     ('/CreatePhoto/',createPhoto),
 				     ('/photoListGet/',getPhotoList),
 				     ('/photoGet/(.*)',getPhoto),
@@ -449,25 +481,68 @@ app = webapp2.WSGIApplication(
 
 ------------------
 
-.step 5 'client fetch'
+.step 5 'client server bridge: gets and sets'
 
 ---------
 
 .p 'client crud'
 
-.nt 'ajax routines'
+.nt 'client ajax routine'
 <<<
 
-// maybe separate nts
+function ajaxReturn(xhr_url) {
+    var return_string = '';
+    $.ajax({
+                dataType: "text",
+                url : xhr_url,
+                async: false,
+                success : function (newContent) {
+                   return_string = newContent;
+                },
+                error : function ()
+                {
+                }
+    });
+    return return_string;
+}
+
+>>>
+
+.nt 'client handler create photo'
+<<<
+
+	p_list = eval( ajaxReturn('/createPhoto/'+ p_type +'/'+ p_key+'/') );
+>>>
+
+.nt 'client read one'
+<<<
+	p_list = eval( ajaxReturn('/getPhoto/'+ p_type +'/'+ p_key+'/') );
+
+>>>
+
+.nt 'client read list'
+<<<
+	p_list = eval( ajaxReturn('/getPhotoList/'+ p_type +'/'+ p_key+'/') );
+>>>
+
+.nt 'client update caption'
+<<<
+	p_list = eval( ajaxReturn('/updateCaption/'+ p_type +'/'+ p_key+'/') );
+>>>
+
+.nt 'client delete'
+<<<
+	p_list = eval( ajaxReturn('/deletePhoto/'+ p_type +'/'+ p_key+'/') );
+>>>
+
+// maybe these should be separate nts?
+
 // get list
 
 // iterate through list to construct  photos html
 
 // caption crud 
 
-
-
->>>
 
 .nt 'data access layer?'
 <<<
@@ -524,4 +599,6 @@ Need to be able to retrieve so you can regenerate and repopulate.
 ------------------
 
 
-otherwise the todo lists get lost, and we're only left with artifacts, and no way to correct the lists for people who follow us. which is a bit like not saving or showing or improving your work.
+otherwise the todo lists get lost, and we're only left with artifacts, 
+and no way to correct the lists for people who follow us. which is a bit 
+like not saving or showing or improving your work.
