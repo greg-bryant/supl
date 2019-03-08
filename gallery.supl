@@ -22,7 +22,7 @@ the client (in our case delivered by the server):
 Some of these are things which, even if trivial, have default values, 
 so ignoring them is not necessarily keeping them out of the picture.
 
-------------------
+------------------------------------
 
 .step 1 'minimal stubs'
 
@@ -35,7 +35,10 @@ so ignoring them is not necessarily keeping them out of the picture.
 .nt 'client'
 .nt 'client style'
 
-------------------
+------------------------------------
+
+
+------------------------------------
 
 .step 2 'minimal end-to-end code'
 
@@ -155,7 +158,7 @@ class MainPage(webapp2.RequestHandler):
 ---
 
 ---
-.nt 'server demux'
+.nt 'server routing'
 <<<
 
 app = webapp2.WSGIApplication(
@@ -198,20 +201,33 @@ app = webapp2.WSGIApplication(
 .p 'client' 'main.js'
 
 ---
-.nt 'client central handler / event loop'
+.nt 'client event queue declarations'
 <<<
 
 var event_queue = [];
 var the_event = null;
 
-function main_init() {
-	 event_queue.push({'name':'main_page','delay':2000});
+// p_ev is "push event"
+function p_ev(event,delay) {
+	 event_queue.push({'name':event,'delay':delay});
 	 central_handler();
+}
+
+>>>
+
+.nt 'client application structure'
+<<<
+function main_init() {
+	 p_ev('main_page',2000);
 }
 
 function main_page() {
 	 $('#header').html("Main Page");
 }
+>>>
+
+.nt 'client event loop engine -- central handler'
+<<<
 
 // CENTRAL_HANDLER:
 //  called by onload and setTimeout
@@ -291,7 +307,10 @@ h1 {
 
 ---------
 
-------------------
+------------------------------------
+
+
+------------------------------------
 
 .step 3 'data'
 
@@ -428,6 +447,36 @@ class deletePhoto(webapp2.RequestHandler):
 >>>
 ---------
 
+
+---------
+.p 'server routing'
+
+.nt 'URL routing'
+<<<
+
+app = webapp2.WSGIApplication(
+                                     [('/', MainPage),
+				     ('/logout/', LogoutPage),
+				     ('/login/', LoginPage),
+				     ('/CreatePhoto/',createPhoto),
+				     ('/photoListGet/',getPhotoList),
+				     ('/photoGet/(.*)',getPhoto),
+				     ('/updateCaption/(.*)',updateCaption),
+				     ('/deletePhoto/(.*)',deletePhoto)],
+                                            debug=True)
+
+>>>
+
+
+---------
+
+------------------------------------
+
+------------------------------------
+
+.step 4 'authentication and authorization'
+
+
 ---------
 .p 'server auth'
 
@@ -454,32 +503,54 @@ class LogoutPage(webapp2.RequestHandler):
 >>>
 ---------
 
+and routing add
+and client
+and anything else
+and apporpriate stubs
+
+------------------------------------
+
+------------------------------------
+
+.step 5 'client app structure'
+      all the cascading events
 
 ---------
-.p 'server demux'
 
-.nt 'demux two'
+.p 'client application structure'
+   or CAS
+
+.nt 'CAS init'
 <<<
+function main_init() {
+	 p_ev('main_page',2000);
+}
 
-app = webapp2.WSGIApplication(
-                                     [('/', MainPage),
-				     ('/logout/', LogoutPage),
-				     ('/login/', LoginPage),
-				     ('/CreatePhoto/',createPhoto),
-				     ('/photoListGet/',getPhotoList),
-				     ('/photoGet/(.*)',getPhoto),
-				     ('/updateCaption/(.*)',updateCaption),
-				     ('/deletePhoto/(.*)',deletePhoto)],
-                                            debug=True)
+function main_page() {
+	 p_ev('primary_divs');
+         p_ev('secondary_divs');
+	 p_ev('user_controls',2000);
+}
+
+function primary_divs() {
+	 //$('#an_id').html("");
+}
+
+function secondary_divs() {
+	 //$('#an_id').html("");
+}
+
+function user_controls() {
+	 //$('#an_id').html("");
+}
+
 
 >>>
 
 
----------
+------------------------------------
 
-------------------
-
-------------------
+------------------------------------
 
 .step 5 'client server bridge: gets and sets'
 
@@ -553,12 +624,12 @@ function ajaxReturn(xhr_url) {
 
 ---------
 
-------------------
+------------------------------------
 
-------------------
+
+------------------------------------
 
 .step 6 'client UX'
-
 
 ---------
 
@@ -581,20 +652,20 @@ function ajaxReturn(xhr_url) {
 
 ---------
 
-------------------
+------------------------------------
 
-.step 5 'authentication and roles'
+.step 7 'admin page, roles, permissions'
 
-------------------
+------------------------------------
 
-.step 6 'ungenerate infrastructure'
+.step 8 'ungenerate infrastructure'
 
 The generative approach to DB ETL (extract, transform, load).
 Need to be able to retrieve so you can regenerate and repopulate.
 
 ------------------
 
-.step 7 'dashboards'
+.step 9 'dashboards'
 
 ------------------
 
