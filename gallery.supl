@@ -597,28 +597,28 @@ function ajaxReturn(xhr_url) {
 .nt 'client handler create photo'
 <<<
 
-	p_list = eval( ajaxReturn('/createPhoto/'+ p_type +'/'+ p_key+'/') );
+	//p_list = eval( ajaxReturn('/createPhoto/'+ p_type +'/'+ p_key+'/') );
 >>>
 
 .nt 'client read one'
 <<<
-	p_list = eval( ajaxReturn('/getPhoto/'+ p_type +'/'+ p_key+'/') );
+	//p_list = eval( ajaxReturn('/getPhoto/'+ p_type +'/'+ p_key+'/') );
 
 >>>
 
 .nt 'client read list'
 <<<
-	p_list = eval( ajaxReturn('/getPhotoList/'+ p_type +'/'+ p_key+'/') );
+	//p_list = eval( ajaxReturn('/getPhotoList/'+ p_type +'/'+ p_key+'/') );
 >>>
 
 .nt 'client update caption'
 <<<
-	p_list = eval( ajaxReturn('/updateCaption/'+ p_type +'/'+ p_key+'/') );
+	//p_list = eval( ajaxReturn('/updateCaption/'+ p_type +'/'+ p_key+'/') );
 >>>
 
 .nt 'client delete'
 <<<
-	p_list = eval( ajaxReturn('/deletePhoto/'+ p_type +'/'+ p_key+'/') );
+	//p_list = eval( ajaxReturn('/deletePhoto/'+ p_type +'/'+ p_key+'/') );
 >>>
 
 // maybe these should be separate nts?
