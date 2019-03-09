@@ -187,7 +187,7 @@ app = webapp2.WSGIApplication(
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     </head>
     <body onload="main_init()">
-        <div class="whole">
+        <div id="whole" class="whole">
             <div id="header">initial text</div>
         </div>
     </body>
@@ -552,9 +552,10 @@ function user_controls() {
 .nt 'cas utilities'
 <<<
 function append_div(parent_id,new_child_id) {
-	 jQuery('<div/>', {
-    	 		  id: new_child_id
-			  }).appendTo(parent_id);
+	 //jQuery('<div/>', {
+    	 	//	  id: new_child_id
+			//  }).appendTo(parent_id);
+         $('#'+parent_id).append('<div id="' +new_child_id+ '"></div>');
 }
 
 function insert_html(target_id,html) {
