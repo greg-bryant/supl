@@ -208,8 +208,8 @@ var event_queue = [];
 var the_event = null;
 
 // p_ev is "push event"
-function p_ev(event,delay) {
-	 event_queue.push({'name':event,'delay':delay});
+function p_ev(event) {
+	 event_queue.push({'name':event,'delay':2000});
 	 central_handler();
 }
 
@@ -523,30 +523,45 @@ and apporpriate stubs
 .nt 'CAS init'
 <<<
 function main_init() {
-	 p_ev('main_page',2000);
+	 p_ev('main_page');
 }
 
 function main_page() {
 	 p_ev('primary_divs');
          p_ev('secondary_divs');
-	 p_ev('user_controls',2000);
+	 p_ev('user_controls');
 }
 
 function primary_divs() {
-	 //$('#an_id').html("");
+	 append_div('whole','contents');
+	 append_div('whole','footer');
 }
 
 function secondary_divs() {
-	 //$('#an_id').html("");
+	 insert_html('contents','HELLO CONTENTS');
 }
 
 function user_controls() {
-	 //$('#an_id').html("");
+	 // I want to see a button here
+	 // that then writes somethings somewhere
+	 // call it basic handler performance
 }
-
 
 >>>
 
+.nt 'cas utilities'
+<<<
+function append_div(parent_id,new_child_id) {
+	 jQuery('<div/>', {
+    	 		  id: new_child_id
+			  }).appendTo(parent_id);
+}
+
+function insert_html(target_id,html) {
+	 $('#'+target_id).html(html);
+}
+
+>>>
 
 ------------------------------------
 
