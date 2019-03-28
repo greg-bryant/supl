@@ -287,7 +287,7 @@ h1 {
 }
 
 /* classes */
-.whole { color: white; 
+.whole { color: black; 
        	 height: 100%;
 	 width: 100%;
 }
@@ -397,28 +397,21 @@ class getPhotoList(webapp2.RequestHandler):
     def get(self):
 
         photos = db.GqlQuery("SELECT * FROM Photo")
-        return_string = '['
-        overview = '{ \'name\':\'photos\','
-        overview = overview + '\'value\':\'\' }'
-        return_string = return_string + overview
+        overview = '{ \'name\':\'photos\',' + '\'value\':\'\' }'
 
         all_n = '[' + overview
         k = 0
         i = 0
         for p in photos:
-
             if i > 0:
-	                return_string = return_string + ','
-            return_string = return_string + '{ \'name\':' + '\'' + re.escape(c.name) + '\','
-            return_string = return_string + '\'key\':' + '\'' + str(c.key()) + '\' }'
+	                all_n = all_n + ','
+            all_n = all_n + '{ \'name\':' + '\'' + re.escape(p.name) + '\','
+            all_n = all_n + '\'key\':' + '\'' + p.key() + '\' }'
             i = i + 1
 
-        return_string = return_string + ']'   
         all_n = all_n + ']'
-        if string == 'cn':
-            return_string = all_n
+        return_string = all_n
         logging.debug(return_string)
-        return return_string
         self.response.write(return_string)
 >>>
 
@@ -459,8 +452,8 @@ app = webapp2.WSGIApplication(
 				     ('/logout/', LogoutPage),
 				     ('/login/', LoginPage),
 				     ('/CreatePhoto/',createPhoto),
-				     ('/photoListGet/',getPhotoList),
-				     ('/photoGet/(.*)',getPhoto),
+				     ('/getPhotoList/',getPhotoList),
+				     ('/getPhoto/(.*)',getPhoto),
 				     ('/updateCaption/(.*)',updateCaption),
 				     ('/deletePhoto/(.*)',deletePhoto)],
                                             debug=True)
@@ -475,7 +468,6 @@ app = webapp2.WSGIApplication(
 ------------------------------------
 
 .step 4 'authentication and authorization'
-
 
 ---------
 .p 'server auth'
@@ -513,12 +505,39 @@ and apporpriate stubs
 ------------------------------------
 
 .step 5 'client app structure'
+
+      this could be called the 'client UX'
+
       all the cascading events
+
+---------
+
+.p 'client display'
+
+.nt 'initial fetch'
+
+.nt 'clickables'
+
+.nt 'photo display'
+
+.nt 'editing'
+
+---------
+
+
+---------
+
+.p 'display style'
+
+---------
 
 ---------
 
 .p 'client application structure'
    or CAS
+   by "application structure" I mean the
+   contingent, specific, substance,
+   accidental part of the application.
 
 .nt 'CAS init'
 <<<
@@ -533,16 +552,22 @@ function main_page() {
 }
 
 function primary_divs() {
+	 append_div('whole','title');
 	 append_div('whole','contents');
 	 append_div('whole','footer');
 }
+>>>
 
-function secondary_divs() {
-	 insert_html('contents','HELLO CONTENTS');
+.nt 'CAS stubs'
+<<<
+
+function secondary_divs() {	 
+	 insert_html('title','Image gallery');
+	 insert_html('contents','Images');
 }
 
 function user_controls() {
-	 // I want to see a button here
+	 // I want to see a TEST button here
 	 // that then writes somethings somewhere
 	 // call it basic handler performance
 }
@@ -568,7 +593,9 @@ function insert_html(target_id,html) {
 
 ------------------------------------
 
-.step 5 'client server bridge: gets and sets'
+.step 6 'client server bridge: gets and sets'
+
+      ties that ux to the server
 
 ---------
 
@@ -641,49 +668,100 @@ function ajaxReturn(xhr_url) {
 ---------
 
 ------------------------------------
-
-
 ------------------------------------
 
-.step 6 'client UX'
+.step 7 'server-fed UX'
 
 ---------
 
-.p 'client display'
+.p 'CAS stubs'
 
-.nt 'initial fetch'
+.nt 'CAS get list'
+<<<
 
-.nt 'clickables'
+function getPhotoList() {
+	photo_list = eval( ajaxReturn('/getPhotoList/') );
+	return photo_list;
+}
 
-.nt 'photo display'
+>>>
 
-.nt 'editing'
+.nt 'CAS display list'
+<<<
 
----------
+function secondary_divs() {	 
+	 // call ajax
+	 pl = getPhotoList();
+	 // make divs
+	 insert_html('title','Image gallery');
+	 insert_html('contents','Images');
+}
+
+function user_controls() {
+	 // I want to see a TEST button here
+	 append_div('contents','program_controls');
+	 append_div('contents','test_target');
+    	 createButton('program_controls',0,150,40,40,'TEST','TEST ME',
+                 "p_ev('test_callback',1000);"
+    		 );
+	 // that then writes somethings somewhere
+	 // call it basic handler performance
+
+	 // next step:
+	 // make buttons for image close-ups	 
+	 // I want to see a button here
+	 // that then writes somethings somewhere
+	 // call it basic handler performance
+}
+
+function test_callback() {
+	 insert_html('test_target','BOOM');
+}
 
 
----------
+function createButton(parent_name,x,y,w,h,name,text,cb) {
+    var parent = document.getElementById(parent_name);
+    var new_b = document.createElement('div');
+    new_b.style['position'] = 'relative';
+    new_b.style['top'] = y + 'px';
+    new_b.style['left'] = x + 'px';
+    new_b.style['width'] = w + 'px';
+    new_b.style['height'] = h +'px';
+    new_b.style['padding'] = '5px';
+    new_b.style['margin'] = '2px';
+    new_b.id = name;
+    new_b.style['background'] = "#333333";
+    new_b.style['color'] = "#ffffff";
+    new_b.style['cursor'] = "pointer";
+    new_b.innerHTML = text;
+    // new_b.onclick(cb);                                                                                                                                                                                   
+    new_b.setAttribute('onclick',cb);
+    parent.appendChild(new_b);
+}
 
-.p 'display style'
-
----------
+>>>
 
 ------------------------------------
-
-.step 7 'admin page, roles, permissions'
-
 ------------------------------------
 
-.step 8 'ungenerate infrastructure'
+.step 8 'admin page, roles, permissions'
+
+------------------------------------
+------------------------------------
+
+.step 9 'ungenerate infrastructure'
 
 The generative approach to DB ETL (extract, transform, load).
 Need to be able to retrieve so you can regenerate and repopulate.
 
-------------------
+------------------------------------
+------------------------------------
 
-.step 9 'dashboards'
+.step 10 'dashboards'
 
-------------------
+      UX modules really, high integrated expoeriences, for admin and user editing.
+
+------------------------------------
 
 
 otherwise the todo lists get lost, and we're only left with artifacts, 
