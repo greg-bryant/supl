@@ -217,10 +217,13 @@ function p_ev(event) {
 
 .nt 'client application structure'
 <<<
+// called by html when page loads
 function main_init() {
+	 // p_ev puts functions on the event queue
 	 p_ev('main_page',2000);
 }
 
+// write something on the main page
 function main_page() {
 	 $('#header').html("Main Page");
 }
@@ -231,6 +234,7 @@ function main_page() {
 
 // CENTRAL_HANDLER:
 //  called by onload and setTimeout
+//  empties the event queue, one event at a time
 function central_handler() {
 
     if (!(event_queue.length > 0)) {
@@ -318,13 +322,12 @@ h1 {
 
 .p 'server schema'
 
-a gallery is 
+our 'gallery app' is: 
 a splash page (optional)
 linked to a set of thumbnail pages (with captions)
 linked to photo pages
-so the db: one type
-
-photo, with caption text, and generated thumbnail.
+so the db is one type:
+photo, with caption text, and a generated thumbnail
 
 .nt 'photo schema'
 <<<
@@ -371,6 +374,9 @@ class createPhoto(webapp2.RequestHandler):
 
 .nt 'read one'
 <<<
+
+# API: get one photo, with key passed from photo gallery,
+#      which is built with other API call: getPhotoList 
 class getPhoto(webapp2.RequestHandler):
     def get(self,string):
 
@@ -393,6 +399,8 @@ class getPhoto(webapp2.RequestHandler):
 
 .nt 'read list'
 <<<
+# API: get list of photos
+#
 class getPhotoList(webapp2.RequestHandler):
     def get(self):
 
@@ -577,9 +585,6 @@ function user_controls() {
 .nt 'cas utilities'
 <<<
 function append_div(parent_id,new_child_id) {
-	 //jQuery('<div/>', {
-    	 	//	  id: new_child_id
-			//  }).appendTo(parent_id);
          $('#'+parent_id).append('<div id="' +new_child_id+ '"></div>');
 }
 
@@ -672,6 +677,10 @@ function ajaxReturn(xhr_url) {
 
 .step 7 'server-fed UX'
 
+ By which I mean client-side
+ user interfaces / experiences that make use of 
+ server side data (through an API)
+
 ---------
 
 .p 'CAS stubs'
@@ -686,7 +695,7 @@ function getPhotoList() {
 
 >>>
 
-.nt 'CAS display list'
+.nt 'CAS display lists'
 <<<
 
 function secondary_divs() {	 
@@ -697,6 +706,11 @@ function secondary_divs() {
 	 insert_html('contents','Images');
 }
 
+>>>
+
+
+.nt 'CAS control stub'
+<<<
 function user_controls() {
 	 // I want to see a TEST button here
 	 append_div('contents','program_controls');
