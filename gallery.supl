@@ -29,7 +29,7 @@ so ignoring them is not necessarily keeping them out of the picture.
 ---------
 
 .p 'start'
-.nt 'platform config'
+.nt 'platform configuration'
 .nt 'server'
 .nt 'server client bridge'
 .nt 'client'
@@ -44,10 +44,10 @@ so ignoring them is not necessarily keeping them out of the picture.
 
 ---------
 
-.p 'platform config' 'app.yaml'
+.p 'platform configuration' 'app.yaml'
 
 ---
-.nt 'platform config values'
+.nt 'platform configuration values'
 <<<
 
 application: gallery
@@ -60,7 +60,7 @@ threadsafe: true
 ---
 
 ---
-.nt 'platform config handlers'
+.nt 'platform configuration handlers'
 <<<
 
 handlers:
@@ -87,7 +87,7 @@ handlers:
 .p 'server' 'gallery.py'
 
 ---
-.nt 'server includes'
+.nt 'server externals'
 <<<
 
 # gallery.py
@@ -117,7 +117,7 @@ from google.appengine.api import users
 .nt 'server schema'
 <<<
 
-# DB Schema -- to do
+# Database Schema -- to do
 
 >>>
 ---
@@ -133,6 +133,10 @@ from google.appengine.api import users
 ---
 
 ---
+when our URL is hit, deliver the client-side html file.
+this will then request server resources, as described in app.yaml,
+but this module will not see those requests.
+
 .nt 'server delivers client'
 <<<
 
@@ -149,6 +153,9 @@ class MainPage(webapp2.RequestHandler):
 ---
 
 ---
+aside from the initial file, and some authorization data, this server
+module responds solely with JSON data -- which is what a typical API looks like.
+
 .nt 'server db crud cycle'
 <<<
 
@@ -174,6 +181,11 @@ app = webapp2.WSGIApplication(
 .p 'server client bridge' 'index.html'
 
 ---
+This is the index.html file returned to the browser.
+It does as little as possible, in order to bootstrap
+the client-side application: the css file, the js file,
+and loads the main_init routine from the javascript file.
+
 .nt 'to launch javascript'
 <<<
 
@@ -198,9 +210,16 @@ app = webapp2.WSGIApplication(
 ---------
 
 ---------
+This is the main javascript file for the client browser,
+loaded and called by the index.html file.
+
 .p 'client' 'main.js'
 
 ---
+browser javascript programs MUST have a an event queue and
+central handler, or else actions will get stalled by system
+requests. this fact is hidden by libraries like angular.
+
 .nt 'client event queue declarations'
 <<<
 
@@ -214,6 +233,10 @@ function p_ev(event) {
 }
 
 >>>
+
+ultimately, there should be some kind of json structure,
+which defines the application, i.e. main_page->(header,content,footer)
+content->(photo_list) ... which then gets read by a 'structure engine'.
 
 .nt 'client application structure'
 <<<
@@ -235,6 +258,7 @@ function main_page() {
 // CENTRAL_HANDLER:
 //  called by onload and setTimeout
 //  empties the event queue, one event at a time
+
 function central_handler() {
 
     if (!(event_queue.length > 0)) {
@@ -258,14 +282,14 @@ function central_handler() {
 ---
 .nt 'client crud'
 <<<
-	// api use - to do
+	// routines that use the server api - to do
 >>>
 ---
 
 ---
 .nt 'client display'
 <<<
-	// display data - to do
+	// display the data - to do
 >>>
 ---
 ---------
@@ -274,6 +298,8 @@ function central_handler() {
 .p 'client style' 'main.css'
 
 ---
+just a little css so far
+
 .nt 'heading'
 <<<
 
@@ -327,7 +353,7 @@ a splash page (optional)
 linked to a set of thumbnail pages (with captions)
 linked to photo pages
 so the db is one type:
-photo, with caption text, and a generated thumbnail
+photo: with caption text, and a generated thumbnail
 
 .nt 'photo schema'
 <<<
@@ -567,6 +593,9 @@ function primary_divs() {
 	 append_div('whole','footer');
 }
 >>>
+
+By stubs I literally mean bits that will start small
+grow out and branch out.
 
 .nt 'CAS stubs'
 <<<

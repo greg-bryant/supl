@@ -1,0 +1,11 @@
+this folder is where i did the first supl worked examples, ending with "gallery", which I generate with:
+
+./supl gallery.supl TEST
+
+note that supl itself is generated with Makefile
+
+note that I did not work on grogix in this folder. I just developed the supl translator and gallery.supl
+
+note that some of these terminal sessions are stored in ~Proects/supl\ terminals
+
+note that this is also a git repository. in this folder.
